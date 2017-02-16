@@ -14,8 +14,6 @@ A simple nodejs express proxy server. Used to request a remote image with modifi
 ## Example
 We can query a true color image, and modify RGB channels so we see more detail in the GB channels - i.e. ocean colors.
 
-Before:
-![Screenshot](/screenshots/original.jpeg?raw=true)
-
-After: 
-![Screenshot](/screenshots/example.jpeg?raw=true)
+|Before|After|
+|---|---|
+|![Screenshot](/screenshots/original.jpeg?raw=true)|![Screenshot](/screenshots/example.jpeg?raw=true)|
