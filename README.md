@@ -12,6 +12,7 @@ A simple nodejs express proxy server. Used to request a remote image with modifi
 ```
 
 RGB params are applied as weights. 
+
 i.e. `R = R * <value>`.
 So a value equal to 1 does nothing: `R * 1 = R`, a value over one increases the channel, and a value below one decreases the channel. 
 
