@@ -84,9 +84,13 @@ app.get('/', cors(corsOptions), function(req, res){
 				}
 				this.bitmap.data[ idx + 2 ] = blue;
 
+				if(red == 255 && green == 255 && blue == 255){
+					this.bitmap.data[ idx + 3 ] = 0;
+				}
+
 			});
 
-			image.getBuffer('image/jpeg', function(err, buffer){
+			image.getBuffer('image/png', function(err, buffer){
 
 				if(err){
 					res.end(err);
