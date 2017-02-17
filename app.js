@@ -18,15 +18,17 @@ var corsOptions = {
 	}
 };
 
-// http://localhost:8080/?red=0&green=5.5&blue=6&url=http://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_TrueColor/default/2017-01-25/GoogleMapsCompatible_Level9/7/78/37.jpeg
-
+// http://localhost:8080/?r_min=4&r_max=70&g_min=4&g_max=40&b_min=4&b_max=40&url=http://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_TrueColor/default/2017-01-25/GoogleMapsCompatible_Level9/7/78/37.jpeg
 
 function validateParams(queryData){
 	if(!queryData) return false;
 	if(!queryData.url) return false;
-	if(!queryData.red) return false;
-	if(!queryData.green) return false;
-	if(!queryData.blue) return false;
+	if(!queryData.r_min) return false;
+	if(!queryData.r_max) return false;
+	if(!queryData.g_min) return false;
+	if(!queryData.g_max) return false;
+	if(!queryData.b_min) return false;
+	if(!queryData.b_max) return false;
 	return true;
 }
 
@@ -52,16 +54,34 @@ app.get('/', cors(corsOptions), function(req, res){
 				// idx is the position start position of this rgba tuple in the bitmap Buffer
 				// this is the image
 
+				// RED
 				var red = this.bitmap.data[ idx + 0 ];
-				red = red * queryData.red;
+				if(red >= queryData.r_min && red <= queryData.r_max){
+					red = rescale(red, queryData.r_min, queryData.r_max, 0, 255);
+				}
+				else {
+					red = 255;
+				}
 				this.bitmap.data[ idx + 0 ] = red;
 
+				// GREEN
 				var green = this.bitmap.data[ idx + 1 ];
-				green = green * queryData.green;
+				if(green >= queryData.g_min && green <= queryData.g_max){
+					green = rescale(green, queryData.g_min, queryData.g_max, 0, 255);
+				}
+				else {
+					green = 255;
+				}
 				this.bitmap.data[ idx + 1 ] = green;
 
-				var blue  = this.bitmap.data[ idx + 2 ];
-				blue = blue * queryData.blue;
+				// BLUE
+				var blue = this.bitmap.data[ idx + 2 ];
+				if(blue >= queryData.b_min && blue <= queryData.b_max){
+					blue = rescale(blue, queryData.b_min, queryData.b_max, 0, 255);
+				}
+				else {
+					blue = 255;
+				}
 				this.bitmap.data[ idx + 2 ] = blue;
 
 			});
@@ -79,6 +99,11 @@ app.get('/', cors(corsOptions), function(req, res){
 
 	});
 
-
 });
+
+function rescale(value, oldMin, oldMax, newMin, newMax){
+	var oldRange = oldMax - oldMin;
+	var newRange = newMax - newMin;
+	return Math.round(((value - oldMin) * newRange / oldRange) + newMin);
+}
 

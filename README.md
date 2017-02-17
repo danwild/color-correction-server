@@ -5,16 +5,16 @@ A simple nodejs express proxy server. Used to request a remote image with modifi
 ```javascript
 {
 	url: 'http://example.com/cat.jpeg' // the url of the target image
-	red: 1 // modifier value for red channel
-	green: 1 // modifier value for green channel
-	blue: 1 // modifier value for blue channel
+	r_min: 4, // min valid value for red channel
+	r_max: 70, // max valid value for red channel
+	g_min: 4, // min valid value for green channel
+    g_max: 40, // max valid value for green channel
+    b_min: 4, // min valid value for blue channel
+    b_max: 40, // max valid value for blue channel
 }
 ```
 
-RGB params are applied as weights. 
-
-i.e. `R = R * <value>`.
-So a value equal to 1 does nothing: `R * 1 = R`, a value over one increases the channel, and a value below one decreases the channel. 
+RGB params define the valid range for each channel, valid color values are then 'stretched' out to cover the 0-255 channel. 
 
 ## Example
 For example, we can query a true color satellite image from NASA and modify RGB channels so we see more detail in the green/blue channels - i.e. ocean colors.
