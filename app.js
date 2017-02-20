@@ -50,6 +50,7 @@ app.get('/', cors(corsOptions), function(req, res){
 		else {
 
 			image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+
 				// x, y is the position of this pixel on the image
 				// idx is the position start position of this rgba tuple in the bitmap Buffer
 				// this is the image
@@ -59,7 +60,10 @@ app.get('/', cors(corsOptions), function(req, res){
 				if(red >= queryData.r_min && red <= queryData.r_max){
 					red = rescale(red, queryData.r_min, queryData.r_max, 0, 255);
 				}
-				else {
+				else if(red < queryData.r_min) {
+					red = 0;
+				}
+				else if(red > queryData.r_max) {
 					red = 255;
 				}
 				this.bitmap.data[ idx + 0 ] = red;
@@ -69,7 +73,10 @@ app.get('/', cors(corsOptions), function(req, res){
 				if(green >= queryData.g_min && green <= queryData.g_max){
 					green = rescale(green, queryData.g_min, queryData.g_max, 0, 255);
 				}
-				else {
+				else if(green < queryData.g_min) {
+					green = 0;
+				}
+				else if(green > queryData.g_max) {
 					green = 255;
 				}
 				this.bitmap.data[ idx + 1 ] = green;
@@ -79,7 +86,10 @@ app.get('/', cors(corsOptions), function(req, res){
 				if(blue >= queryData.b_min && blue <= queryData.b_max){
 					blue = rescale(blue, queryData.b_min, queryData.b_max, 0, 255);
 				}
-				else {
+				else if(blue < queryData.b_min) {
+					blue = 0;
+				}
+				else if(blue > queryData.b_max) {
 					blue = 255;
 				}
 				this.bitmap.data[ idx + 2 ] = blue;
@@ -108,6 +118,6 @@ app.get('/', cors(corsOptions), function(req, res){
 function rescale(value, oldMin, oldMax, newMin, newMax){
 	var oldRange = oldMax - oldMin;
 	var newRange = newMax - newMin;
-	return Math.round(((value - oldMin) * newRange / oldRange) + newMin);
+	return Math.round( ((value - oldMin) * newRange / oldRange) + newMin );
 }
 
